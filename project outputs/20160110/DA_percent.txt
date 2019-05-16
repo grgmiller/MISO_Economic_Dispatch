@@ -1,0 +1,3 @@
+Date: 20160110
+91.4% percent of demand (1,749,160 of 1,913,191 MW) cleared in day-ahead market
+Only 164,031 MW cleared in RTM
