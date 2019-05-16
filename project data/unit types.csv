@@ -1,0 +1,15 @@
+Unit Type,Unit Description,Prime Mover Code,Fuel Codes,Emissions Rate (mTCO2/MWh),NG,OIL,COAL,MSW,WIND,HYDRO,DR
+4, Steam Turbine,ST,"BIT, DFO, LIG, MSW, NG, PC, PG, RC, RFO, SUB, TDF, WO",1.026203204,0.0885,0.0213,0.8868,0.0034,0,0,0
+5," Combined Cycle, Steam Part",CA,"BIT, DFO, NG, PC, SGC, SGP",0.054835985,,,,,0,0,0
+27, Combustion (Gas) Turbine ,GT,NG,0.642134107,,,,,0,0,0
+31,Diesel,IC,DFO,1.576380046,,,,,0,0,0
+41, Run of River,,,0,0,0,0,0,0,1,0
+42, Pumped Storage,,,0,0,0,0,0,0,1,0
+51," Combined Cycle, Turbine Part",CT,"DFO, NG, SGC, SGP",0.616292671,,,,,,,
+52,Combined Cycle single Shaft,CS,NG,0.663461538,,,,,,,
+61, Wind,,,0,0,0,0,0,1,0,0
+71, Other Fossil,IC,NG,0.522370045,,,,,,,
+72, Other Peaker,GT,"DFO, JF, KER",0.786432275,,,,,,,
+87, DR Type 1 (Block DR interruptible),,,0,0,0,0,0,0,0,1
+88, DR Type 2 (continuous dispatchable DR),,,0,0,0,0,0,0,0,1
+90,,,,,,,,,,,
