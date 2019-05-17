@@ -73,7 +73,7 @@ EnergyBids['Hour'].astype(str) #convert hour number to string
 
 #Generators can bid above their Pmax, so need to adjust bids so that they cannot be above the economic Pmax
 print('Capping all economic bids at generator Pmax...')
-for i in range(1,10):
+for i in range(1,11):
         mask = (EnergyBids['MW'+str(i)] > EnergyBids['Economic Max']).tolist() #create a boolean list if bid > max
         maskList = [i for i, x in enumerate(mask) if x] #create list of indices where condition is true
         for n in maskList:
@@ -81,15 +81,16 @@ for i in range(1,10):
 
 #Generators can bid below their Pmin, so need to adjust bids so that none are below their Economic Pmin
 print('Raising all economic bids to Pmin...')
-for i in range(1,10):
+for i in range(1,11):
         mask = ((EnergyBids['Economic Flag'] == 1) & (EnergyBids['MW'+str(i)] < EnergyBids['Economic Min'])).tolist() #create a boolean list if the bid is less than economic min for all economic-participating generators
         maskList = [i for i, x in enumerate(mask) if x] #create list of indices where condition is true
         for n in maskList:
                 EnergyBids.loc[EnergyBids.index[n],'MW'+str(i)] = EnergyBids.loc[EnergyBids.index[n],'Economic Min'] #replace the bid qty with the economic min
+                EnergyBids.loc[EnergyBids.index[n],'Price'+str(i)] = EnergyBids.loc[EnergyBids.index[n],'Price'+str(i+1)] #replace the bid price with the next highest bid price
 
 #If generators are classified as "must run", adjust their bids under their Emergency Min threshold to have a bid price of -$9999 so that they are always dispatched
 print('Adjusting all must-run generator bids...')
-for i in range(1,10):
+for i in range(1,11):
         mask = ((EnergyBids['Must Run Flag'] == 1) & (EnergyBids['MW'+str(i)] <= EnergyBids['Emergency Min'])).tolist() #create boolean list if generator is classified as must-run and the bid qty is less than its emergency min
         maskList = [i for i, x in enumerate(mask) if x] #create list of indices where condition is true
         for n in maskList:
@@ -167,9 +168,9 @@ def market_clearing(): #Calculate what percent of demand cleared in the day-ahea
                 daco_hour = daco_hour[['Unit Code','MW']] #drop all DAM data except the unit code and cleared MW
                 merged = rtco_hour.merge(daco_hour, left_on='Unit Code', right_on='Unit Code', how='left') #add DA cleared MW to RTM data, matched by unit code
                 merged['MW'].fillna(0) #if unit did not bid in DAM, then replace NA with 0
-                for i in range(1,12): #for each five minute interval
+                for i in range(1,13): #for each five minute interval
                         merged['Cleared MW'+str(i)] = abs(merged['Cleared MW'+str(i)] - merged['MW']) #find the magnitude of difference between the MW cleared in RTM and DAM
-                merged['MW_sum'] = merged.loc[:,'Cleared MW1':'Cleared MW10':2].sum(axis=1) / 12 #sum all 12 5-min intervals and divide by 12 to get MWh
+                merged['MW_sum'] = merged.loc[:,'Cleared MW1':'Cleared MW12':2].sum(axis=1) / 12 #sum all 12 5-min intervals and divide by 12 to get MWh
                 hourly_sum = merged.loc[:,'MW_sum'].sum() #find the sum of RTM cleared MW for the given hour
                 dataframe.loc[hh,'MW_sum'] = hourly_sum #add the sum to the main dataframe
         rt_sum = dataframe.loc[:,'MW_sum'].sum() #find the sum of RTM cleared MW for the entire day
